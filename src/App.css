@@ -69,23 +69,23 @@ html {
   top: 0;
   left: 100px;
   right: 0;
-  z-index: -1;
+  /* z-index: -1; */
 }
 .main_lgin_smfig_1 {
   width: fit-content;
-  position: relative;
-  top: 123px;
-  left: 110px;
+    position: absolute;
+    top: 30%;
+    left: 15%;
 }
 .main_lgin_smfig_1 img {
-  width: 100%;
+  width: 140px;
   object-fit: cover;
 }
 .main_lgin_smfig_2 {
   width: fit-content;
-  position: relative;
-  top: -57px;
-  left: 175px;
+    position: absolute;
+    top: 12%;
+    left: 28%;
 }
 .main_lgin_smfig_2 img {
   width: 100%;
@@ -93,9 +93,9 @@ html {
 }
 .main_lgin_smfig_3 {
   width: fit-content;
-  position: relative;
-  top: -164px;
-  left: 310px;
+    position: absolute;
+    top: 12%;
+    left: 48%;
 }
 .main_lgin_smfig_3 img {
   width: 100%;
@@ -103,9 +103,9 @@ html {
 }
 .main_lgin_smfig_5 {
   width: fit-content;
-  position: relative;
-  top: -200px;
-  left: 445px;
+    position: absolute;
+    top: 30%;
+    right: 15%;
 }
 .main_lgin_smfig_5 img {
   width: 100%;
@@ -168,5 +168,5 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50%;
+  margin: 40px 0;
 }

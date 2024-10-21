@@ -142,6 +142,7 @@ function ForecastLogin() {
                     style={{
                       ...backgroundStyle,
                       width: "100%",
+                      height: "100%",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
@@ -156,8 +157,8 @@ function ForecastLogin() {
                       <img src={hr} alt="" />
                     </motion.div>
 
-                    <div className="main_lgin_smfig">
-                      <motion.div
+                    {/* <div className="main_lgin_smfig"> */}
+                      <motion.div 
                         className="main_lgin_smfig_1"
                         variants={imageVariants}
                       >
@@ -181,7 +182,7 @@ function ForecastLogin() {
                       >
                         <img src={smfive} alt="" />
                       </motion.div>
-                    </div>
+                    {/* </div> */}
                   </motion.div>
                 </div>
                 <div className="col-lg-4 col-md-4 p-0">
