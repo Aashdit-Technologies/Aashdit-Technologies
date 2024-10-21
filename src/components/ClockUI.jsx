@@ -52,6 +52,7 @@ const ClockUi = () => {
   }, []);
 
   return (
+    <div className="clock-border">
     <div className="clock">
       {/* AM or PM */}
       <div className="a-p-switch">
@@ -83,6 +84,7 @@ const ClockUi = () => {
         <div className="arrow"></div>
       </div>
       <div className="dot"></div>
+    </div>
     </div>
   );
 };

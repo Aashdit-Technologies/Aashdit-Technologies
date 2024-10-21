@@ -15,17 +15,27 @@
 .date {
   position: absolute;
 }
-
+.clock-border{
+    border: 0.6em solid #5cd6d6;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 24px 4px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    height: 17em;
+    width: 17em;
+    position: relative;
+    left: 50%;
+    overflow: hidden;
+    transform: translateX(-50%);
+}
 .clock {
-  height: 24em;
-  width: 24em;
+  height: 16em;
+  width: 16em;
   background: #0f3e3e;
-  border: 11px solid #5cd6d6;
+  /* border: 11px solid #5cd6d6; */
   border-radius: 50%;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
+  /* margin-top: 2em;
+  margin-bottom: 2em; */
 }
 
 /* hour lines */
@@ -100,7 +110,7 @@
 #hour-hand,
 #minute-hand {
   background: #00cc99;
-  width: 5px;
+  width: 4px;
   left: calc(50% - 5px/ 2);
 }
 #hour-hand .arrow,
@@ -109,16 +119,17 @@
 }
 
 #hour-hand {
-  height: 80px;
+  height: 60px;
+  width: 8px
 }
 
 #minute-hand {
-  height: 100px;
+  height: 80px;
 }
 
 #second-hand {
-  height: 120px;
-  width: 4px;
+  height: 90px;
+  width: 3px;
   background: #e6005c;
   left: calc(50% - 4px/ 2);
 }
@@ -156,19 +167,20 @@
   bottom: 30%;
   left: calc(50% - 5em/ 2);
   color: #8c8c8c;
-  padding: 7px 0;
+  padding: 0px 0;
   width: 5em;
-  font-size: 1.4em;
+  font-size: 14px;
   gap: 1em;
   font-weight: 500;
 }
 
 .date {
-  width: 10em;
-  left: calc(50% - 10em/ 2);
-  bottom: 20%;
-  padding: 5px 0;
+  width: 9em;
+  left: calc(50% - 9em/ 2);
+  bottom: 22%;
+  padding: 1px 0;
   text-align: center;
   font-weight: 600;
   color: #fff;
+  font-size: 14px;
 }
