@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import Logo from "../images/logo.png";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
 import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
+
 import ClockUI from "./ClockUI";
 
 const temperatureBackgrounds = {
@@ -32,22 +33,22 @@ const temperatureBackgrounds = {
 
 const kelvinToCelsius = (tempK) => Math.round(tempK - 273.15);
 
-const API_KEY = "c247f88f34ce3fcbce03f4bbaa926212";
+  const API_KEY = "c247f88f34ce3fcbce03f4bbaa926212";
 
-const fetchWeatherData = async () => {
-  const city = "Bhubaneswar";
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
+  const fetchWeatherData = async () => {
+    const city = "Bhubaneswar";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
 
-  const response = await fetch(url);
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error(`Network response was not ok: ${response.statusText}`);
-  }
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
 
-  const data = await response.json();
-  console.log("API Response Data:", data);
-  return data;
-};
+    const data = await response.json();
+    console.log("API Response Data:", data);
+    return data;
+  };
 
 // Function to determine greeting based on the current time
 const getGreeting = () => {
