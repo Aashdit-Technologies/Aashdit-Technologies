@@ -11,8 +11,9 @@ const ClockUi = () => {
         h = d.getHours(),
         m = d.getMinutes(),
         s = d.getSeconds(),
-        hDeg = (h / 12) * 360 + (m / 60) * 30,
-        mDeg = (m / 60) * 180 + (s / 60) * 6,
+        
+        hDeg = (h % 12) * 30 + (m / 60) * 30, 
+        mDeg = (m / 60) * 360 + (s / 60) * 6,
         sDeg = (s / 60) * 360,
         am = document.getElementById("am"),
         pm = document.getElementById("pm"),
@@ -27,7 +28,6 @@ const ClockUi = () => {
       mHand.style.transform = `rotate(${mDeg}deg)`;
       sHand.style.transform = `rotate(${sDeg}deg)`;
 
-      // AM/PM switching
       let highLight = "#1affff";
       if (h < 12) {
         am.style.color = highLight;
@@ -37,7 +37,6 @@ const ClockUi = () => {
         am.style.color = "inherit";
       }
 
-      // Current date
       const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const months = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -47,44 +46,48 @@ const ClockUi = () => {
       cDate.innerHTML = `${weeks[day]} ${months[mNo]} ${date}, ${year}`;
     };
 
-    const interval = setInterval(clock, 1000);
+   
+    clock();
+    const interval = setInterval(clock, 1000); 
+
+  
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="clock-border">
-    <div className="clock">
-      {/* AM or PM */}
-      <div className="a-p-switch">
-        <span id="am"><b>AM</b></span>
-        <span id="pm"><b>PM</b></span>
-      </div>
+      <div className="clock">
+        {/* AM or PM */}
+        <div className="a-p-switch">
+          <span id="am"><b>AM</b></span>
+          <span id="pm"><b>PM</b></span>
+        </div>
 
-      {/* Current Date */}
-      <div className="date"></div>
+        {/* Current Date */}
+        <div className="date"></div>
 
-      {/* Hour lines and numbers */}
-      <div className="hour-lines">
-        {Array.from({ length: 6 }, (_, i) => (
-          <div className="line" key={i} style={{ transform: `rotate(${(i + 1) * 30}deg)` }}>
-            <span className="hour">{i + 1}</span>
-            <span className="hour opp-side">{i + 7}</span>
-          </div>
-        ))}
-      </div>
+        {/* Hour lines and numbers */}
+        <div className="hour-lines">
+          {Array.from({ length: 6 }, (_, i) => (
+            <div className="line" key={i} style={{ transform: `rotate(${(i + 1) * 30}deg)` }}>
+              <span className="hour">{i + 1}</span>
+              <span className="hour opp-side">{i + 7}</span>
+            </div>
+          ))}
+        </div>
 
-      {/* Clock hands */}
-      <div className="hand" id="hour-hand">
-        <div className="arrow"></div>
+        {/* Clock hands */}
+        <div className="hand" id="hour-hand">
+          <div className="arrow"></div>
+        </div>
+        <div className="hand" id="minute-hand">
+          <div className="arrow"></div>
+        </div>
+        <div className="hand" id="second-hand">
+          <div className="arrow"></div>
+        </div>
+        <div className="dot"></div>
       </div>
-      <div className="hand" id="minute-hand">
-        <div className="arrow"></div>
-      </div>
-      <div className="hand" id="second-hand">
-        <div className="arrow"></div>
-      </div>
-      <div className="dot"></div>
-    </div>
     </div>
   );
 };
