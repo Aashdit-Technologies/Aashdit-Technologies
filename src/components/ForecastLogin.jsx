@@ -7,9 +7,10 @@ import smthree from "../images/3.png";
 import smfive from "../images/5.png";
 import { motion } from "framer-motion";
 import Logo from "../images/logo.png";
-import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
-import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
+
+
 import ClockUI from "./ClockUI";
+import LoginApi from "./LoginApi";
 
 const temperatureBackgrounds = {
   cold: {
@@ -79,8 +80,7 @@ const getTemperatureBackground = (tempC) => {
 // const currentDateTime = new Date().toLocaleString();
 
 function ForecastLogin() {
-  const [showText, setShowText] = useState(false);
-  const [value, setValue] = useState("");
+  
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["weather"],
     queryFn: fetchWeatherData,
@@ -94,9 +94,7 @@ function ForecastLogin() {
     return <div>Error fetching weather data: {error.message}</div>;
   }
 
-  const handleClickShowText = () => {
-    setShowText((prev) => !prev);
-  };
+ 
   const temperatureK = data?.main?.temp;
   const temperatureC = kelvinToCelsius(temperatureK);
 
@@ -137,53 +135,55 @@ function ForecastLogin() {
             <div className="main_bg ">
               <div className="row ">
                 <div className="col-lg-8 col-md-8 p-0">
-                  <motion.div
-                    className="main_lgin"
+                  <div
                     style={{
                       ...backgroundStyle,
                       width: "100%",
-                      height: "100%",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
                   >
                     <motion.div
-                      className="main_lgin_fig"
-                      variants={imageVariants}
+                      className="main_lgin"
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
                     >
-                      <img src={hr} alt="" />
-                    </motion.div>
+                      <motion.div
+                        className="main_lgin_fig"
+                        variants={imageVariants}
+                      >
+                        <img src={hr} alt="" />
+                      </motion.div>
 
-                    {/* <div className="main_lgin_smfig"> */}
-                      <motion.div 
-                        className="main_lgin_smfig_1"
-                        variants={imageVariants}
-                      >
-                        <img src={smone} alt="" />
-                      </motion.div>
-                      <motion.div
-                        className="main_lgin_smfig_2"
-                        variants={imageVariants}
-                      >
-                        <img src={smtwo} alt="" />
-                      </motion.div>
-                      <motion.div
-                        className="main_lgin_smfig_3"
-                        variants={imageVariants}
-                      >
-                        <img src={smthree} alt="" />
-                      </motion.div>
-                      <motion.div
-                        className="main_lgin_smfig_5"
-                        variants={imageVariants}
-                      >
-                        <img src={smfive} alt="" />
-                      </motion.div>
-                    {/* </div> */}
-                  </motion.div>
+                      {/* <div className="main_lgin_smfig"> */}
+                        <motion.div
+                          className="main_lgin_smfig_1"
+                          variants={imageVariants}
+                        >
+                          <img src={smone} alt="" />
+                        </motion.div>
+                        <motion.div
+                          className="main_lgin_smfig_2"
+                          variants={imageVariants}
+                        >
+                          <img src={smtwo} alt="" />
+                        </motion.div>
+                        <motion.div
+                          className="main_lgin_smfig_3"
+                          variants={imageVariants}
+                        >
+                          <img src={smthree} alt="" />
+                        </motion.div>
+                        <motion.div
+                          className="main_lgin_smfig_5"
+                          variants={imageVariants}
+                        >
+                          <img src={smfive} alt="" />
+                        </motion.div>
+                      {/* </div> */}
+                    </motion.div>
+                  </div>
                 </div>
                 <div className="col-lg-4 col-md-4 p-0">
                   <div className="main_rht">
@@ -195,64 +195,10 @@ function ForecastLogin() {
                       {/* <h6 >{currentDateTime}</h6> */}
                     </div>
                     <div className="main_rht_box">
-                      <form action="">
-                        <div className="row">
-                          <div className="col-md-12 col-lg-12">
-                            <div className="main_rht_box_inpt">
-                              <TextField
-                                id="standard-basic"
-                                label="User ID"
-                                variant="standard"
-                                sx={{ width: "100%" }}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12 col-lg-12 mt-2">
-                            <div className="main_rht_box_inpt">
-                              <TextField
-                                id="enabled-text-field"
-                                label="Password"
-                                variant="standard"
-                                type={showText ? "text" : "password"} // Change type based on toggle
-                                value={value}
-                                onChange={(e) => setValue(e.target.value)} // Handle value change
-                                InputProps={{
-                                  endAdornment: (
-                                    <InputAdornment position="end">
-                                      <IconButton
-                                        aria-label="toggle text visibility"
-                                        onClick={handleClickShowText}
-                                        edge="end"
-                                      >
-                                        {showText ? (
-                                          <VisibilityOff />
-                                        ) : (
-                                          <Visibility />
-                                        )}
-                                      </IconButton>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                sx={{ width: "100%" }} // Optional: Make the field full width
-                              />
-                            </div>
-                          </div>
-                          <div className="col-lg-12 col-md-12 mt-3">
-                            <div className="btn_lgin">
-                              <Button
-                                variant="contained"
-                                startIcon={<Login />}
-                                sx={{ width: "100%", mt: 2 }}
-                              >
-                                Log In
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
+                      <LoginApi/>
                     </div>
                     <div className="clock_main">
-                      <ClockUI/>
+                      <ClockUI />
                     </div>
                   </div>
                 </div>
