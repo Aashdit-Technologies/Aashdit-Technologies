@@ -1,164 +1,161 @@
-import * as React from 'react';
-import { extendTheme, styled } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Logout Icon
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import Grid from '@mui/material/Grid2';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  DashboardOutlined,
+  PeopleOutlined,
+  DevicesOutlined,
+  LunchDiningOutlined,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
+import GroupIcon from "@mui/icons-material/Group"; // Icon for employee type
+import "./Sidebar.css";
 
-const NAVIGATION = [
-  {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  // User info and Logout section
-  {
-    kind: 'header',
-    title: 'User Info',
-  },
-  {
-    segment: 'logout',
-    title: 'Logout',
-    icon: <ExitToAppIcon />,
-  },
-];
+const Sidebar = () => {
+  const [openMenus, setOpenMenus] = useState({});
 
-const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: 'class',
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-function useDemoRouter(initialPath) {
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
-    };
-  }, [pathname]);
-
-  return router;
-}
-
-const Skeleton = styled('div')(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
-
-export default function DashboardLayoutBasic(props) {
-  const { window } = props;
-
-  const router = useDemoRouter('/dashboard');
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window ? window() : undefined;
+  const handleToggle = (menu, e) => {
+    e.stopPropagation();
+    setOpenMenus((prev) => ({
+      ...prev,
+      [menu]: !prev[menu],
+    }));
+  };
 
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      router={router}
-      theme={demoTheme}
-      window={demoWindow}
-    >
-      <DashboardLayout>
-        <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
+    <div className="sidebar">
+      <ul className="menu">
+        {/* Dashboard */}
+        <li className="menu-item" >
+          <div className="menu-icon-text">
+            <DashboardOutlined className="menu-icon" style={{fontSize:"18px"}}/>
+            <Link to="/" className="menu-text">Dashboard</Link>
+          </div>
+        </li>
 
-            <Grid size={12}>
-              <Skeleton height={150} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
+        {/* Human Resources */}
+        <li className="menu-item" onClick={(e) => handleToggle("hr", e)}>
+          <div className="menu-icon-text">
+            <PeopleOutlined className="menu-icon" style={{fontSize:"18px"}}/>
+            <span className="menu-text">Human Resources</span>
+          </div>
+          {openMenus.hr ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+        </li>
 
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-          </Grid>
-        </PageContainer>
-      </DashboardLayout>
-    </AppProvider>
+        {/* Submenu for Human Resources */}
+        {openMenus.hr && (
+          <ul className="submenu">
+            <li className="submenu-item" onClick={(e) => handleToggle("employeeProfile", e)}>
+              <div className="menu-icon-text">
+                <GroupIcon className="submenu-icon" style={{fontSize:"18px"}}/>
+                <span className="menu-text-innr">Employee</span>
+              </div>
+              {openMenus.employeeProfile ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+            </li>
+
+            {openMenus.employeeProfile && (
+              <ul className="submenu">
+                <li className="submenu-item">
+                  <Link to="/employee-profile/general" className="menu-link">Employee Profile</Link>
+                </li>
+              </ul>
+            )}
+
+            {/* Attendance */}
+            <li className="submenu-item" onClick={(e) => handleToggle("attendance", e)}>
+              <div className="menu-icon-text">
+                <GroupIcon className="submenu-icon" style={{fontSize:"18px"}}/>
+                <span className="menu-text-innr">Attendance</span>
+              </div>
+              {openMenus.attendance ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+            </li>
+
+            {openMenus.attendance && (
+              <ul className="submenu">
+                <li className="submenu-item">
+                  <Link to="/attendance/ajay" className="menu-link">Ajay</Link>
+                </li>
+              </ul>
+            )}
+
+            {/* Leaves */}
+            <li className="submenu-item" onClick={(e) => handleToggle("leaves", e)}>
+              <div className="menu-icon-text">
+                <GroupIcon className="submenu-icon" style={{fontSize:"18px"}}/>
+                <span className="menu-text-innr">Leaves</span>
+              </div>
+              {openMenus.leaves ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+            </li>
+
+            {openMenus.leaves && (
+              <ul className="submenu">
+                <li className="submenu-item">
+                  <Link to="/leaves/ajay" className="menu-link">Ajay</Link>
+                </li>
+              </ul>
+            )}
+
+            {/* Reimbursements */}
+            <li className="submenu-item" onClick={(e) => handleToggle("reimbursements", e)}>
+              <div className="menu-icon-text">
+                <GroupIcon className="submenu-icon" style={{fontSize:"18px"}}/>
+                <span className="menu-text-innr">Reimbursements</span>
+              </div>
+              {openMenus.reimbursements ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+            </li>
+
+            {openMenus.reimbursements && (
+              <ul className="submenu">
+                <li className="submenu-item">
+                  <Link to="/reimbursements/ajay" className="menu-link">Ajay</Link>
+                </li>
+              </ul>
+            )}
+          </ul>
+        )}
+
+        {/* IT Assets */}
+        <li className="menu-item" onClick={(e) => handleToggle("itAssets", e)}>
+          <div className="menu-icon-text">
+            <DevicesOutlined className="menu-icon" style={{fontSize:"18px"}}/>
+            <span className="menu-text">IT Assets</span>
+          </div>
+          {openMenus.itAssets ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+        </li>
+
+        {openMenus.itAssets && (
+          <ul className="submenu">
+            <li className="submenu-item">
+              <Link to="/it-assets/ajay" className="menu-link">Ajay</Link>
+            </li>
+            <li className="submenu-item">
+              <Link to="/it-assets/pabitra" className="menu-link">Pabitra</Link>
+            </li>
+          </ul>
+        )}
+
+        {/* Lunch Management */}
+        <li className="menu-item" onClick={(e) => handleToggle("lunchManagement", e)}>
+          <div className="menu-icon-text">
+            <LunchDiningOutlined className="menu-icon" style={{fontSize:"18px"}}/>
+            <span className="menu-text">Lunch Management</span>
+          </div>
+          {openMenus.lunchManagement ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+        </li>
+
+        {openMenus.lunchManagement && (
+          <ul className="submenu">
+            <li className="submenu-item">
+              <Link to="/lunch-management/ajay" className="menu-link">Ajay</Link>
+            </li>
+            <li className="submenu-item">
+              <Link to="/lunch-management/pabitra" className="menu-link">Pabitra</Link>
+            </li>
+          </ul>
+        )}
+      </ul>
+    </div>
   );
-}
+};
+
+export default Sidebar;
