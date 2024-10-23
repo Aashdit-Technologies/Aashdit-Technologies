@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"; // Ensure you are using the correct import
 import hr from "../images/hr.png";
 import smone from "../images/1.png";
 import smtwo from "../images/2.png";
@@ -7,27 +7,21 @@ import smthree from "../images/3.png";
 import smfive from "../images/5.png";
 import { motion } from "framer-motion";
 import Logo from "../images/logo.png";
-
-
 import ClockUI from "./ClockUI";
 import LoginApi from "./LoginApi";
 
 const temperatureBackgrounds = {
   cold: {
     background: "linear-gradient(to bottom, #00BFFF, #1E90FF)",
-    animation: "coldAnimation 10s ease-in-out infinite",
   },
   cool: {
     background: "linear-gradient(to bottom, #87CEEB, #4682B4)",
-    animation: "coolAnimation 10s ease-in-out infinite",
   },
   warm: {
     background: "linear-gradient(to bottom, #FFD700, #FFA500)",
-    animation: "warmAnimation 10s ease-in-out infinite",
   },
   hot: {
     background: "linear-gradient(to bottom, #FF4500, #FF6347)",
-    animation: "hotAnimation 10s ease-in-out infinite",
   },
 };
 
@@ -35,6 +29,7 @@ const kelvinToCelsius = (tempK) => Math.round(tempK - 273.15);
 
 const API_KEY = "c247f88f34ce3fcbce03f4bbaa926212";
 
+// Function to fetch weather data
 const fetchWeatherData = async () => {
   const city = "Bhubaneswar";
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
@@ -76,11 +71,9 @@ const getTemperatureBackground = (tempC) => {
     return temperatureBackgrounds.hot;
   }
 };
-// Get current date and time
-// const currentDateTime = new Date().toLocaleString();
 
 function ForecastLogin() {
-  
+  // Update useQuery to use the object syntax
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["weather"],
     queryFn: fetchWeatherData,
@@ -94,13 +87,11 @@ function ForecastLogin() {
     return <div>Error fetching weather data: {error.message}</div>;
   }
 
- 
   const temperatureK = data?.main?.temp;
   const temperatureC = kelvinToCelsius(temperatureK);
-
   const backgroundStyle = getTemperatureBackground(temperatureC);
-
   const greeting = getGreeting();
+
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -109,7 +100,7 @@ function ForecastLogin() {
       transition: {
         duration: 1,
         delayChildren: 0.5,
-        staggerChildren: 0.5, // Animates children with a delay
+        staggerChildren: 0.5,
       },
     },
   };
@@ -149,39 +140,22 @@ function ForecastLogin() {
                       initial="hidden"
                       animate="visible"
                     >
-                      <motion.div
-                        className="main_lgin_fig"
-                        variants={imageVariants}
-                      >
+                      <motion.div className="main_lgin_fig" variants={imageVariants}>
                         <img src={hr} alt="" />
                       </motion.div>
 
-                      {/* <div className="main_lgin_smfig"> */}
-                        <motion.div
-                          className="main_lgin_smfig_1"
-                          variants={imageVariants}
-                        >
-                          <img src={smone} alt="" />
-                        </motion.div>
-                        <motion.div
-                          className="main_lgin_smfig_2"
-                          variants={imageVariants}
-                        >
-                          <img src={smtwo} alt="" />
-                        </motion.div>
-                        <motion.div
-                          className="main_lgin_smfig_3"
-                          variants={imageVariants}
-                        >
-                          <img src={smthree} alt="" />
-                        </motion.div>
-                        <motion.div
-                          className="main_lgin_smfig_5"
-                          variants={imageVariants}
-                        >
-                          <img src={smfive} alt="" />
-                        </motion.div>
-                      {/* </div> */}
+                      <motion.div className="main_lgin_smfig_1" variants={imageVariants}>
+                        <img src={smone} alt="" />
+                      </motion.div>
+                      <motion.div className="main_lgin_smfig_2" variants={imageVariants}>
+                        <img src={smtwo} alt="" />
+                      </motion.div>
+                      <motion.div className="main_lgin_smfig_3" variants={imageVariants}>
+                        <img src={smthree} alt="" />
+                      </motion.div>
+                      <motion.div className="main_lgin_smfig_5" variants={imageVariants}>
+                        <img src={smfive} alt="" />
+                      </motion.div>
                     </motion.div>
                   </div>
                 </div>
@@ -192,10 +166,9 @@ function ForecastLogin() {
                       <div className="logo">
                         <img src={Logo} alt="" />
                       </div>
-                      {/* <h6 >{currentDateTime}</h6> */}
                     </div>
                     <div className="main_rht_box">
-                      <LoginApi/>
+                      <LoginApi />
                     </div>
                     <div className="clock_main">
                       <ClockUI />
@@ -207,11 +180,6 @@ function ForecastLogin() {
           </div>
         </div>
       </div>
-
-      {/* <h1 style={{ color: "#fff", textAlign: "center" }}>{greeting}</h1>
-      <h2 style={{ color: "#fff", textAlign: "center" }}>
-        Current Temperature: {temperatureC}°C
-      </h2> */}
     </div>
   );
 }
