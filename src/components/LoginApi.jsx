@@ -1,36 +1,51 @@
-// src/components/LoginApi.jsx
 import React, { useState } from "react";
 import { TextField, InputAdornment, IconButton, Button, Typography } from "@mui/material";
 import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/Store";
-import { loginUser } from "../components/authService";
 
 const LoginApi = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const setToken = useAuthStore((state) => state.setToken);
 
-  // Mutation for logging in
-  const mutation = useMutation({
-    mutationFn: (credentials) => loginUser(credentials.userName, credentials.password),
-    onSuccess: (data) => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const API_URL = "http://192.168.3.121:7008/sanrakhshana/api/login";
+      const credentials = { userName, password };
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || 'Login failed');
+      }
+
+      const data = await response.json();
       const accessToken = data.accessToken;
       setToken(accessToken); // Store token in Zustand store
       navigate("/dashboard"); // Redirect to dashboard
-    },
-    onError: (error) => {
-      console.error("Login failed:", error.message); // Log error message
-    },
-  });
 
-  // Handle login form submission
-  const handleLogin = (e) => {
-    e.preventDefault();
-    mutation.mutate({ userName, password });
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      setError(error.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,16 +82,16 @@ const LoginApi = () => {
           type="submit"
           variant="contained"
           startIcon={<Login />}
-          disabled={mutation.isLoading}
+          disabled={loading}
           fullWidth
           style={{ marginTop: "20px" }}
         >
-          {mutation.isLoading ? "Logging in..." : "Log In"}
+          {loading ? "Logging in..." : "Log In"}
         </Button>
 
-        {mutation.isError && (
+        {error && (
           <Typography variant="h6" color="error" style={{ marginTop: "20px" }}>
-            {mutation.error?.message || "Login failed. Please try again."}
+            {error}
           </Typography>
         )}
       </form>
