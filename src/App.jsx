@@ -1,3 +1,4 @@
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./App.css";
@@ -16,7 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<ForecastLogin />} />
-          <Route path="/dashboard" element={<Sidebar />} />
+          <Route path="/dashboard" element={<DashboardAll />} /> 
         </Routes>
       </Router>
     </QueryClientProvider>

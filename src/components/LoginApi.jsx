@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { TextField, InputAdornment, IconButton, Button, Typography } from "@mui/material";
 import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"; // For navigation after login
-import useAuthStore from "../store/Store"; // Zustand store
-import { loginUser } from "../components/authService"; // Import the API service
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/Store";
+import { loginUser } from "../components/authService";
 
 const LoginApi = () => {
   const [userName, setUserName] = useState("");
@@ -16,7 +16,7 @@ const LoginApi = () => {
 
   // Mutation for logging in
   const mutation = useMutation({
-    mutationFn: ({ userName, password }) => loginUser(userName, password),
+    mutationFn: (credentials) => loginUser(credentials.userName, credentials.password),
     onSuccess: (data) => {
       const accessToken = data.accessToken;
       setToken(accessToken); // Store token in Zustand store
@@ -54,6 +54,7 @@ const LoginApi = () => {
               <InputAdornment position="end">
                 <IconButton
                   onClick={() => setShowPassword((prev) => !prev)}
+                  edge="end"
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -68,13 +69,13 @@ const LoginApi = () => {
           startIcon={<Login />}
           disabled={mutation.isLoading}
           fullWidth
-          style={{marginTop:"20px"}}
+          style={{ marginTop: "20px" }}
         >
           {mutation.isLoading ? "Logging in..." : "Log In"}
         </Button>
 
         {mutation.isError && (
-          <Typography variant="h6" color="error.main" style={{ marginTop: "20px" }}>
+          <Typography variant="h6" color="error" style={{ marginTop: "20px" }}>
             {mutation.error?.message || "Login failed. Please try again."}
           </Typography>
         )}
