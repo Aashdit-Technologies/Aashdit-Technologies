@@ -19,8 +19,9 @@ const LoginApi = () => {
     setError("");
 
     try {
-      const API_URL = "http://192.168.3.121:7008/sanrakhshana/api/login";
+      const API_URL = "http://192.168.3.131:1111/hrms/api/login";
       const credentials = { userName, password };
+      
 
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -36,6 +37,8 @@ const LoginApi = () => {
       }
 
       const data = await response.json();
+      console.log(data);
+      
       const accessToken = data.accessToken;
       setToken(accessToken); // Store token in Zustand store
       navigate("/dashboard"); // Redirect to dashboard
