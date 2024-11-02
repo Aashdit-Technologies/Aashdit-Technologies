@@ -24,6 +24,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
+      {/* Add Logo */}
       <ul className="menu">
         {/* Dashboard */}
         <li className="menu-item" >
