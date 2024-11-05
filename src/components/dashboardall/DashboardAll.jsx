@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../sidebar/Sidebar";
 import "../css/DashboardAllCss.css";
 import Header from "../sidebarheader/Header";
+import DashboardHome from "../dashboardusermain/DashboardHome";
 
 const DashboardAll = () => {
   return (
@@ -14,6 +15,7 @@ const DashboardAll = () => {
             </div>
             <div className="col-lg-10 col-md-10">
               <Header />
+              <DashboardHome />
             </div>
           </div>
         </div>
