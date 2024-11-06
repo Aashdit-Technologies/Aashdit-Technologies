@@ -8,7 +8,7 @@ import { FaIdBadge, FaCalendarAlt } from "react-icons/fa";
 const Header = () => {
   return (
     <>
-      <div className="container">
+      <div className="container-fluid">
         <div className="hedr_main">
           <div className="row">
             <div className="hedr_main_wish">

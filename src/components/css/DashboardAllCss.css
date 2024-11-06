@@ -14,9 +14,10 @@
   height: 100vh;
   background-color: #fff;
   padding: 0;
-  position: fixed;
+  position: sticky;
   left: 0;
-  width: 230px;
+  width: 100%;
+  min-width: 310px;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
