@@ -1,54 +1,70 @@
 import React, { useState } from "react";
-import { TextField, InputAdornment, IconButton, Button, Typography } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import useAuthStore from "../store/Store";
+import api from "../Api/api";
 
 const LoginApi = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const setToken = useAuthStore((state) => state.setToken);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  const loginMutation = useMutation({
+    mutationFn: async ({ userName, password }) => {
+      const response = await api.post("/login", { userName, password });
+      console.log("Full response data:", response.data);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      console.log("Login success data:", data);
 
-    try {
-      const API_URL = "http://192.168.3.131:1111/hrms/api/login";
-      const credentials = { userName, password };
-      
+      if (data.outcome) {
+        const accessToken = data.data;
+        console.log("Setting access token:", accessToken);
 
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
+        if (accessToken) {
+          setToken(accessToken);
+          console.log("Stored token in Zustand store:", useAuthStore.getState().token);
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage || 'Login failed');
+          api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+          toast.success("Successfully logged in!", {
+            autoClose: 1000, 
+            onClose: () => navigate("/hrms"), 
+          });
+        } else {
+          console.error("Access token not found in response");
+          toast.error("Login failed. Token not found.");
+        }
+      } else {
+        toast.error(data.message || "Invalid username or password. Please try again.");
       }
+    },
+    onError: (error) => {
+      console.error("Login error:", error);
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
+    },
+  });
 
-      const data = await response.json();
-      console.log(data);
-      
-      const accessToken = data.accessToken;
-      setToken(accessToken); // Store token in Zustand store
-      navigate("/dashboard"); // Redirect to dashboard
+  const handleLogin = (e) => {
+    e.preventDefault();
 
-    } catch (error) {
-      console.error("Login failed:", error.message);
-      setError(error.message || "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+    if (!userName || !password) {
+      toast.error("Both username and password are required");
+      return;
     }
+
+    loginMutation.mutate({ userName, password });
   };
 
   return (
@@ -60,6 +76,7 @@ const LoginApi = () => {
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           fullWidth
+          autoComplete="false"
         />
         <TextField
           label="Password"
@@ -85,18 +102,12 @@ const LoginApi = () => {
           type="submit"
           variant="contained"
           startIcon={<Login />}
-          disabled={loading}
+          disabled={loginMutation.isLoading}
           fullWidth
           style={{ marginTop: "20px" }}
         >
-          {loading ? "Logging in..." : "Log In"}
+          {loginMutation.isLoading ? "Logging in..." : "Log In"}
         </Button>
-
-        {error && (
-          <Typography variant="h6" color="error" style={{ marginTop: "20px" }}>
-            {error}
-          </Typography>
-        )}
       </form>
     </div>
   );

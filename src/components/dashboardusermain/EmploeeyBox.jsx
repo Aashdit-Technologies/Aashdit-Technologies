@@ -14,8 +14,30 @@ import {
 } from "react-icons/md";
 import "../css/DashboardAllCss.css";
 import Girl2 from "../../images/girl2.jpg";
+import useAuthStore from "../../store/Store";
 
 const EmploeeyBox = () => {
+  const data = useAuthStore((state) => state.data) || {};
+  const { empMasterView = {} } = data;
+  const {
+    employeeName,
+    departmentName,
+    employeeCode,
+    mobileNo,
+    officeEmail,
+    birthDate,
+    bloodGroup,
+    aadharNo,
+    panNo,
+    ...rest 
+  } = empMasterView;
+
+  if (!employeeName) {
+    return <div>No user data available.</div>;
+  }
+  
+
+  
   return (
     <>
       <div className="col-md-4 mt-4">
@@ -28,8 +50,8 @@ const EmploeeyBox = () => {
                   <img src={Girl2} alt="Employee" />
                 </div>
                 <div className="imgcon">
-                  <h5>Ananya Das</h5>
-                  <p>EMP0003588</p>
+                  <h5>{employeeName}</h5>
+                  <p>{employeeCode}</p>
                 </div>
               </div>
               <div className="row">
@@ -38,38 +60,38 @@ const EmploeeyBox = () => {
                     <li>
                       <MdDeviceHub color="#535353" />
                       <strong>Department: </strong>
-                      <span>UI/UX Developer</span>
+                      <span>{departmentName}</span>
                     </li>
                     <li>
                       <MdSmartphone color="#535353" />
                       <strong>Mobile No.: </strong>
-                      <span>+91 - 81785 88835</span>
+                      <span>+91 - {mobileNo}</span>
                       <a href="#">Verify</a>
                     </li>
                     <li>
                       <MdMail color="#535353" />
                       <strong>Email ID: </strong>
-                      <span>abc@aashdit.com</span>
+                      <span>{officeEmail}</span>
                     </li>
                     <li>
                       <MdCalendarToday color="#535353" />
                       <strong>DOB: </strong>
-                      <span>01-08-1995</span>
+                      <span>{birthDate}</span>
                     </li>
                     <li>
                       <MdFingerprint color="#535353" />
                       <strong>Aadhar No.: </strong>
-                      <span>32XXXXXXXX355</span>
+                      <span>{aadharNo}</span>
                     </li>
                     <li>
                       <MdWebAsset color="#535353" />
                       <strong>PAN No.: </strong>
-                      <span>IBTXXXXXXXX19</span>
+                      <span>{panNo}</span>
                     </li>
                     <li>
                       <MdBloodtype color="#535353" />
                       <strong>Blood Group: </strong>
-                      <span>B+</span>
+                      <span>{bloodGroup}</span>
                     </li>
                   </ul>
                   <div style={{width:"100%", textAlign:"center"}}>

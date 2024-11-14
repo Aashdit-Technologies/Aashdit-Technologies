@@ -1,250 +1,157 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import useAuthStore from "../../store/Store";
+import api from "../../Api/api";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import {
-  DashboardOutlined,
-  PeopleOutlined,
-  DevicesOutlined,
-  LunchDiningOutlined,
-  ExpandLess,
-  ExpandMore,
+import { 
+  DashboardOutlined, 
+  ExpandLess, 
+  ExpandMore, 
+  People, 
+  EventAvailable, 
+  CalendarToday, 
+  AttachMoney, 
+  LunchDining 
 } from "@mui/icons-material";
-import GroupIcon from "@mui/icons-material/Group"; // Icon for employee type
-import "./Sidebar.css";
+import TaskIcon from "@mui/icons-material/Task";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import "./sidebar.css";
+import useLogout from "../logoutfunction/useLogout";
 
 const Sidebar = () => {
-  const [openMenus, setOpenMenus] = useState({});
+  const [menuData, setMenuData] = useState([]);
+  const [openMenu, setOpenMenu] = useState(null);
+  const [openSubMenu, setOpenSubMenu] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const logout = useLogout();
+  const token = useAuthStore((state) => state.token);
 
-  const handleToggle = (menu, e) => {
-    e.stopPropagation();
-    setOpenMenus((prev) => ({
+  useEffect(() => {
+    if (token) {
+      const fetchData = async () => {
+        try {
+          const response = await api.get("/fetchMenuUrl");
+          setMenuData(response.data.data || []);
+        } catch (error) {
+          setError(error.response?.data?.message || "Failed to fetch data");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    } else {
+      setLoading(false);
+      setError("Token is missing or invalid.");
+    }
+  }, [token]);
+
+  const handleMenuToggle = (menuId) => {
+    setOpenMenu((prev) => (prev === menuId ? null : menuId));
+    setOpenSubMenu({});
+  };
+
+  const handleSubMenuToggle = (parentMenuId, subMenuId) => {
+    setOpenSubMenu((prev) => ({
       ...prev,
-      [menu]: !prev[menu],
+      [parentMenuId]: prev[parentMenuId] === subMenuId ? null : subMenuId,
     }));
   };
 
+  const iconMapping = {
+    "Employee": <People className="menu-icon" />,
+    "Attendance": <EventAvailable className="menu-icon" />,
+    "Leaves": <CalendarToday className="menu-icon" />,
+    "Reimbursements": <AttachMoney className="menu-icon" />,
+    "Manage Task": <TaskIcon className="menu-icon" />,
+    "Status Report": <AssessmentIcon className="menu-icon" />,
+    "Human Resources": <People className="menu-icon" />,
+    "Lunch Management": <LunchDining className="menu-icon" />,
+  };
+
+  // Helper function to render icons only at main menu and first submenu level
+  const getIcon = (menuName, level) => {
+    return level < 2 ? iconMapping[menuName] || <People className="menu-icon" /> : null;
+  };
+
+  const renderMenu = (menuItems, level = 0) =>
+    menuItems.map((item) => (
+      <li key={item.menuId} className={`menu-item level-${level}`}>
+        {item.subMenu && item.subMenu.length > 0 ? (
+          <div className="menu-icon-text" onClick={() => handleMenuToggle(item.menuId)}>
+            {getIcon(item.menuName, level)}
+            <span className="menu-text">{item.menuName}</span>
+            {openMenu === item.menuId ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+          </div>
+        ) : (
+          <Link to={item.menuURL.replace("_$", "")} className="menu-link">
+            <div className="menu-icon-text">
+              {getIcon(item.menuName, level)}
+              <span className="menu-text">{item.menuName}</span>
+            </div>
+          </Link>
+        )}
+
+        {openMenu === item.menuId && item.subMenu && item.subMenu.length > 0 && (
+          <ul className="submenu">
+            {item.subMenu.map((subItem) => (
+              <li key={subItem.menuId} className="submenu-item">
+                {subItem.subMenu && subItem.subMenu.length > 0 ? (
+                  <div className="menu-icon-text" onClick={() => handleSubMenuToggle(item.menuId, subItem.menuId)}>
+                    {getIcon(subItem.menuName, level + 1)}
+                    <span className="menu-text">{subItem.menuName}</span>
+                    {openSubMenu[item.menuId] === subItem.menuId ? <ExpandLess className="dropdown-icon" /> : <ExpandMore className="dropdown-icon" />}
+                  </div>
+                ) : (
+                  <Link to={subItem.menuURL.replace("_$", "")} className="menu-link">
+                    <span className="menu-text">{subItem.menuName}</span>
+                  </Link>
+                )}
+
+                {openSubMenu[item.menuId] === subItem.menuId && subItem.subMenu && subItem.subMenu.length > 0 && (
+                  <ul className="nested-submenu">
+                    {subItem.subMenu.map((nestedSubItem) => (
+                      <li key={nestedSubItem.menuId} className="nested-submenu-item">
+                        <Link to={nestedSubItem.menuURL.replace("_$", "")} className="menu-link">
+                          <span className="menu-text">{nestedSubItem.menuName}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ));
+
   return (
     <div className="sidebar">
-      {/* Add Logo */}
       <ul className="menu">
-        {/* Dashboard */}
         <li className="menu-item">
-          <div className="menu-icon-text">
-            <DashboardOutlined
-              className="menu-icon"
-              style={{ fontSize: "18px" }}
-            />
-            <Link to="/" className="menu-text">
+          <div className="menu-icon-text d-flex align-items-center">
+            <DashboardOutlined className="menu-icon" style={{ fontSize: "14px" }} />
+            <Link to="/hrms/" className="menu-link"> 
               Dashboard
             </Link>
           </div>
         </li>
 
-        {/* Human Resources */}
-        <li className="menu-item" onClick={(e) => handleToggle("hr", e)}>
-          <div className="menu-icon-text">
-            <PeopleOutlined
-              className="menu-icon"
-              style={{ fontSize: "18px" }}
-            />
-            <span className="menu-text">Human Resources</span>
-          </div>
-          {openMenus.hr ? (
-            <ExpandLess className="dropdown-icon" />
-          ) : (
-            <ExpandMore className="dropdown-icon" />
-          )}
-        </li>
-
-        {/* Submenu for Human Resources */}
-        {openMenus.hr && (
-          <ul className="submenu">
-            <li
-              className="submenu-item"
-              onClick={(e) => handleToggle("employeeProfile", e)}
-            >
-              <div className="menu-icon-text">
-                <GroupIcon
-                  className="submenu-icon"
-                  style={{ fontSize: "18px" }}
-                />
-                <span className="menu-text-innr">Employee</span>
-              </div>
-              {openMenus.employeeProfile ? (
-                <ExpandLess className="dropdown-icon" />
-              ) : (
-                <ExpandMore className="dropdown-icon" />
-              )}
-            </li>
-
-            {openMenus.employeeProfile && (
-              <ul className="submenu">
-                <li className="submenu-item">
-                  <Link to="/employee-profile/general" className="menu-link">
-                    Employee Profile
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-            {/* Attendance */}
-            <li
-              className="submenu-item"
-              onClick={(e) => handleToggle("attendance", e)}
-            >
-              <div className="menu-icon-text">
-                <GroupIcon
-                  className="submenu-icon"
-                  style={{ fontSize: "18px" }}
-                />
-                <span className="menu-text-innr">Attendance</span>
-              </div>
-              {openMenus.attendance ? (
-                <ExpandLess className="dropdown-icon" />
-              ) : (
-                <ExpandMore className="dropdown-icon" />
-              )}
-            </li>
-
-            {openMenus.attendance && (
-              <ul className="submenu">
-                <li className="submenu-item">
-                  <Link to="/attendance/ajay" className="menu-link">
-                    Ajay
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-            {/* Leaves */}
-            <li
-              className="submenu-item"
-              onClick={(e) => handleToggle("leaves", e)}
-            >
-              <div className="menu-icon-text">
-                <GroupIcon
-                  className="submenu-icon"
-                  style={{ fontSize: "18px" }}
-                />
-                <span className="menu-text-innr">Leaves</span>
-              </div>
-              {openMenus.leaves ? (
-                <ExpandLess className="dropdown-icon" />
-              ) : (
-                <ExpandMore className="dropdown-icon" />
-              )}
-            </li>
-
-            {openMenus.leaves && (
-              <ul className="submenu">
-                <li className="submenu-item">
-                  <Link to="/leaves/ajay" className="menu-link">
-                    Ajay
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-            {/* Reimbursements */}
-            <li
-              className="submenu-item"
-              onClick={(e) => handleToggle("reimbursements", e)}
-            >
-              <div className="menu-icon-text">
-                <GroupIcon
-                  className="submenu-icon"
-                  style={{ fontSize: "18px" }}
-                />
-                <span className="menu-text-innr">Reimbursements</span>
-              </div>
-              {openMenus.reimbursements ? (
-                <ExpandLess className="dropdown-icon" />
-              ) : (
-                <ExpandMore className="dropdown-icon" />
-              )}
-            </li>
-
-            {openMenus.reimbursements && (
-              <ul className="submenu">
-                <li className="submenu-item">
-                  <Link to="/reimbursements/ajay" className="menu-link">
-                    Ajay
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </ul>
-        )}
-
-        {/* IT Assets */}
-        <li className="menu-item" onClick={(e) => handleToggle("itAssets", e)}>
-          <div className="menu-icon-text">
-            <DevicesOutlined
-              className="menu-icon"
-              style={{ fontSize: "18px" }}
-            />
-            <span className="menu-text">IT Assets</span>
-          </div>
-          {openMenus.itAssets ? (
-            <ExpandLess className="dropdown-icon" />
-          ) : (
-            <ExpandMore className="dropdown-icon" />
-          )}
-        </li>
-
-        {openMenus.itAssets && (
-          <ul className="submenu">
-            <li className="submenu-item">
-              <Link to="/it-assets/ajay" className="menu-link">
-                Ajay
-              </Link>
-            </li>
-            <li className="submenu-item">
-              <Link to="/it-assets/pabitra" className="menu-link">
-                Pabitra
-              </Link>
-            </li>
-          </ul>
-        )}
-
-        {/* Lunch Management */}
-        <li
-          className="menu-item"
-          onClick={(e) => handleToggle("lunchManagement", e)}
-        >
-          <div className="menu-icon-text">
-            <LunchDiningOutlined
-              className="menu-icon"
-              style={{ fontSize: "18px" }}
-            />
-            <span className="menu-text">Lunch Management</span>
-          </div>
-          {openMenus.lunchManagement ? (
-            <ExpandLess className="dropdown-icon" />
-          ) : (
-            <ExpandMore className="dropdown-icon" />
-          )}
-        </li>
-
-        {openMenus.lunchManagement && (
-          <ul className="submenu">
-            <li className="submenu-item">
-              <Link to="/lunch-management/ajay" className="menu-link">
-                Ajay
-              </Link>
-            </li>
-            <li className="submenu-item">
-              <Link to="/lunch-management/pabitra" className="menu-link">
-                Pabitra
-              </Link>
-            </li>
-          </ul>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          renderMenu(menuData)
         )}
       </ul>
+
       <div className="logout_btn">
-        <Button variant="outlined" color="error" style={{gap:"10px"}}>
-          <RiLogoutCircleRLine style={{ fontSize:"20px", rotate:"270deg"}}/>
+        <Button variant="outlined" color="error" onClick={logout} style={{ gap: "10px" }}>
+          <RiLogoutCircleRLine style={{ fontSize: "20px", transform: "rotate(270deg)" }} />
           LogOut
         </Button>
       </div>

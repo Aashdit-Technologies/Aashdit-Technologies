@@ -1,4 +1,7 @@
 import React from "react";
+import useAuthStore from "../../store/Store";
+
+
 
 const cardFooters = [
   "Current Month Working Days vs Late Login",
@@ -8,6 +11,8 @@ const cardFooters = [
 ];
 
 const CardBox = () => {
+  const data = useAuthStore((state) => state.data) ;
+console.log(data);
   return (
     <div className="row mt-5">
       {cardFooters.map((footer, index) => (
@@ -55,6 +60,7 @@ const CardBox = () => {
                 )}
                 {index === 3 && (
                   <>
+                    
                     <div className="work_day1">
                       <span>5</span>
                       <p className="mt-1">PL</p>

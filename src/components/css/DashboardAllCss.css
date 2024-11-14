@@ -9,96 +9,65 @@
   background: #000;
 }
 
-/* Sidebar container */
+/* Sidebar Styling */
 .sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  color: #2c3e50;
   height: 100vh;
-  background-color: #fff;
-  padding: 0;
-  position: sticky;
+  padding-top: 20px;
+  position: fixed;
+  top: 0;
   left: 0;
-  width: 100%;
-  min-width: 310px;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-.menu {
-  list-style-type: none;
-  padding: 0;
+/* Animated Scrollbar */
+.menu::-webkit-scrollbar {
+  width: 8px;
 }
 
-.menu-item,
-.submenu-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  justify-content: space-between;
-  transition: background-color 0.3s ease;
-  color: #535353;
-}
-.submenu-item{
-  padding: 5px;
-}
-.menu-item:hover.menu-icon {
-  color: #0b97d9 !important;
-}
-.menu-item.active,
-.submenu-item.active {
-  background-color: #e4eaff;
-  color: #0b97d9;
+.menu::-webkit-scrollbar-thumb {
+  background-color: #3498db;
+  border-radius: 10px;
 }
 
-.menu-icon,
-.submenu-icon {
-  margin-right: 10px;
-  color: #535353;
+.menu::-webkit-scrollbar-track {
+  background: #ecf0f1;
 }
-
-.menu-text {
-  color: #535353;
-  text-decoration: none;
-  font-size: 15px;
+.log_dv {
+  width: 150px;
+  position: relative;
+  margin: 0 auto 20px;
 }
-
-.menu-text:hover {
-  color: #0b97d9;
-}
-
-.dropdown-icon {
-  margin-left: auto;
-  color: #535353;
-  transition: transform 0.3s ease;
-}
-
-.submenu {
-  list-style-type: none;
-  padding-left: 20px;
-}
-
-.menu-link {
-  color: #535353;
-  text-decoration: none;
-  font-size: 14px;
-  display: block;
+.log_dv img {
   width: 100%;
+  object-fit: cover;
+}
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  width: 100%;
+  height: 350px;
 }
 
-.menu-link:hover {
-  color: #0b97d9;
-  text-decoration: underline;
-}
-.menu-icon-text {
-  font-size: 16px;
-  font-family: "Open Sans", serif;
-}
-span.menu-text-innr {
-  font-size: 15px;
-  font-family: "Open Sans";
+
+.main-content {
+  flex-grow: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 /* header css */
 .hedr_main_wish {
   width: 100%;
   position: relative;
+  
 }
 .hedr_main_wish h3 {
   font-size: 16px;
@@ -224,7 +193,7 @@ display: flex;
 
 .imgcon h5{
     font-weight: bold;
-    font-size: 17px;
+    font-size: 16px;
 }
 .imgcon p{
     color: #535353;
@@ -237,7 +206,7 @@ display: flex;
 .card-body-detail li{
     margin-bottom: 30px;
     display: grid;
-    grid-template-columns: 0.5fr 2fr 2.5fr 1fr;
+    grid-template-columns: 0.5fr 2fr 3.5fr 1fr;
 }
 span.material-icons {
     font-size: 17px;
