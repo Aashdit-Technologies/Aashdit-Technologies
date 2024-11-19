@@ -1,11 +1,16 @@
-// src/components/LoginApi.jsx
 import React, { useState } from "react";
-import { TextField, InputAdornment, IconButton, Button, Typography } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { Visibility, VisibilityOff, Login } from "@mui/icons-material";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import useAuthStore from "../store/Store";
-import { loginUser } from "../components/authService";
+import api from "../Api/api";
 
 const LoginApi = () => {
   const [userName, setUserName] = useState("");
@@ -14,23 +19,52 @@ const LoginApi = () => {
   const navigate = useNavigate();
   const setToken = useAuthStore((state) => state.setToken);
 
-  // Mutation for logging in
-  const mutation = useMutation({
-    mutationFn: (credentials) => loginUser(credentials.userName, credentials.password),
-    onSuccess: (data) => {
-      const accessToken = data.accessToken;
-      setToken(accessToken); // Store token in Zustand store
-      navigate("/dashboard"); // Redirect to dashboard
+  const loginMutation = useMutation({
+    mutationFn: async ({ userName, password }) => {
+      const response = await api.post("/login", { userName, password });
+      console.log("Full response data:", response.data);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      console.log("Login success data:", data);
+
+      if (data.outcome) {
+        const accessToken = data.data;
+        console.log("Setting access token:", accessToken);
+
+        if (accessToken) {
+          setToken(accessToken);
+          console.log("Stored token in Zustand store:", useAuthStore.getState().token);
+
+          api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+          toast.success("Successfully logged in!", {
+            autoClose: 1000, 
+            onClose: () => navigate("/hrms"), 
+          });
+        } else {
+          console.error("Access token not found in response");
+          toast.error("Login failed. Token not found.");
+        }
+      } else {
+        toast.error(data.message || "Invalid username or password. Please try again.");
+      }
     },
     onError: (error) => {
-      console.error("Login failed:", error.message); // Log error message
+      console.error("Login error:", error);
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
     },
   });
 
-  // Handle login form submission
   const handleLogin = (e) => {
     e.preventDefault();
-    mutation.mutate({ userName, password });
+
+    if (!userName || !password) {
+      toast.error("Both username and password are required");
+      return;
+    }
+
+    loginMutation.mutate({ userName, password });
   };
 
   return (
@@ -42,6 +76,7 @@ const LoginApi = () => {
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           fullWidth
+          autoComplete="false"
         />
         <TextField
           label="Password"
@@ -67,18 +102,12 @@ const LoginApi = () => {
           type="submit"
           variant="contained"
           startIcon={<Login />}
-          disabled={mutation.isLoading}
+          disabled={loginMutation.isLoading}
           fullWidth
           style={{ marginTop: "20px" }}
         >
-          {mutation.isLoading ? "Logging in..." : "Log In"}
+          {loginMutation.isLoading ? "Logging in..." : "Log In"}
         </Button>
-
-        {mutation.isError && (
-          <Typography variant="h6" color="error" style={{ marginTop: "20px" }}>
-            {mutation.error?.message || "Login failed. Please try again."}
-          </Typography>
-        )}
       </form>
     </div>
   );
