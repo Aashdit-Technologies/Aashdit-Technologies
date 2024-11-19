@@ -1,39 +1,67 @@
-
-.submenu-item {
-    margin-left: 10px;
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+ .hedr_main{
+  margin-bottom: 15px;
+ }
+ .sidebar {
+  padding-top: 15px !important;
+}
+.logo {
+  width: inherit !important;
+  text-align: center;
+  padding: 0px 0px 20px;
+}
+.sidebar .menu li {
+  padding: 10px 5px 10px 15px;
+}
+.sidebar .menu li .menu-icon-text{
+  color: #535353;
+}
+div.dashboard{
+  background: #E4EAFF;
+  padding: 10px 15px;
+}
+.active{
+  color: #0B97D9;
+  & a{
+    color: #0B97D9;
   }
-  
-  .submenu-link {
-    color: inherit;
-    text-decoration: none;
-  }
-
-.nested-submenu{
-  margin-top: 10px;
+}
+.menu-item a.menu-link span {
+  color: #14BC52 !important;
+}
+.menu-link,.menu-text{
+  font-size: 14px;
+  font-weight: 700;
+}
+.menu-text{
+  font-weight: 500;
+}
+.menu .menu-icon-text{
+  display: flex;
+  gap: 10px;
+}
+.menu-icon-text svg:nth-of-type(2) {
+  margin-left: auto; /* Push the second SVG to the right */
+}
+.submenu .submenu-item .menu-icon-text,.submenu-item .menu-text{
+  color: #0B97D9 !important;  
+}
+.submenu-item .menu-text{
+  font-size: 14px;
+}
+.submenu-item{
+  padding: 5px 0px 5px 15px !important;
+}
+.submenu-item .nested-submenu-item .menu-text{
+  font-size: 13px;
+  /* margin-left: 20px; */
 }
 .nested-submenu-item{
-  margin-top: 8px;
-}
-.menu-icon{
-  font-size: 8px;
-}
-.css-1umw9bq-MuiSvgIcon-root {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  width: 0.80em !important;
-  height: 0.80em !important;
-  display: inline-block;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  fill: currentColor;
-  font-size: 1.3rem !important  ;
-}
-.menu-icon {
-  font-size: 20px; /* Or any other size that suits your layout */
-  margin-right: 10px;
+  padding-bottom: 0 !important;
+  text-align: center;
+  padding-top: 0 !important;
 }

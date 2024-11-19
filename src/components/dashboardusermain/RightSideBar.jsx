@@ -7,7 +7,7 @@ import WishSlider from "./WishSlider";
 const RightSideBar = () => {
   return (
     <>
-      <div className="col-md-8 mt-4">
+      <div className="col-md-8 ">
         <WishSlider />
 
         <CardBox />

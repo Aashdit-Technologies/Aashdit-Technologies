@@ -39,7 +39,7 @@ const EmploeeyBox = () => {
   
   return (
     <>
-      <div className="col-md-4 mt-4">
+      <div className="col-md-4 ">
         <div className="emp-details">
           <div className="card text-black mb-3">
             <div className="card-header"></div>

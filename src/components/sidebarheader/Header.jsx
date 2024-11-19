@@ -10,7 +10,7 @@ import DateAndTime from "../dateandtime/DateAndTime";
 
 const Header = () => {
   const setData = useAuthStore((state) => state.setData); // Zustand setData function
-  const data = useAuthStore((state) => state.data);       // Zustand data state
+  const data = useAuthStore((state) => state.data); // Zustand data state
   const token = useAuthStore((state) => state.token);
 
   const [loading, setLoading] = useState(true);
@@ -40,21 +40,18 @@ const Header = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-  
 
-  
   return (
     <>
       <div className="hedr_main">
         <div className="row">
           <div className="hedr_main_wish">
             <h3>
-              Good Morning,{" "}
-              <span>{data?.empMasterView?.employeeName}</span>
+              Good Morning, <span>{data?.empMasterView?.employeeName}</span>
             </h3>
           </div>
           <div className="col-lg-12 col-md-12">
-            <div className="hedr_main_box d-flex justify-content-between gap-3 align-items-center">
+            <div className="hedr_main_box d-flex gap-2 align-items-center justify-content-between">
               <ul>
                 <li>
                   <HiLightBulb
@@ -72,7 +69,7 @@ const Header = () => {
                 <li>
                   <p>Integration of Fund Management Project</p>
                 </li>
-                <li style={{ borderLeft: "1px solid #D1D1D1" }}>
+                <li className="breakLi">
                   <p
                     style={{
                       color: "var(--green-color)",
@@ -83,16 +80,19 @@ const Header = () => {
                   </p>
                 </li>
                 <li>
-                  <Button color="danger" variant="plain">
+                  <a href="#" class="dismiss" variant="plain">
                     Dismiss
-                  </Button>
+                  </a>
                 </li>
-                <li></li>
               </ul>
               <div className="hedr_main_btn">
                 <Button
                   variant="outlined"
-                  style={{ fontSize: "12px", padding: "2px 8px" }}
+                  style={{
+                    fontSize: "12px",
+                    padding: "2px 8px",
+                    borderRadius: "12px",
+                  }}
                 >
                   <FaPlus /> ADD REMINDER
                 </Button>
@@ -107,7 +107,7 @@ const Header = () => {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "9px",
+                    gap: "10px",
                     fontFamily: "Arial, sans-serif",
                     marginLeft: "auto",
                   }}
@@ -121,7 +121,7 @@ const Header = () => {
                     }}
                   >
                     <FaIdBadge size={20} style={{ color: "#909090" }} />
-                    <div>
+                    <div class="breakRole" style={{ paddingLeft: "10px" }}>
                       <div style={{ fontSize: "10px", color: "#888888" }}>
                         CURRENT ROLE
                       </div>
@@ -133,17 +133,17 @@ const Header = () => {
                           textTransform: "capitalize",
                         }}
                       >
-                        {data?.empMasterView?.empDesgnName} ({data?.empMasterView?.departmentName})
+                        {data?.empMasterView?.empDesgnName} (
+                        {data?.empMasterView?.departmentName})
                       </div>
                     </div>
                   </div>
 
                   
-
-                  {/* Date and Time Section */}
-                  <DateAndTime />
                 </div>
               </div>
+              {/* Date and Time Section */}
+              <DateAndTime />
             </div>
           </div>
         </div>
