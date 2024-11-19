@@ -23,8 +23,8 @@ body,
 html {
   margin: 0;
   padding: 0;
-  width: 100%;
   height: 100vh;
+  overflow-y: hidden;
   font-family: Arial, sans-serif;
   overflow-x: hidden;
   font-family: "Open Sans", serif;
@@ -83,6 +83,7 @@ p{
   justify-content: center;
   align-items: center;
   height: 100vh;
+ 
 }
 .main_lgin_fig {
   width: 100%;
@@ -180,6 +181,7 @@ p{
   position: relative;
   margin: 0 auto;
 }
+
 .logo img {
   width: 100%;
   object-fit: cover;
@@ -206,4 +208,20 @@ p{
   position: absolute;
   margin: 0 auto;
   bottom: 10px;
+}
+/* In your App.css or similar */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 1000;
 }

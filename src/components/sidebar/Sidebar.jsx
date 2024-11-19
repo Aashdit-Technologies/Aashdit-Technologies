@@ -18,7 +18,7 @@ import {
 import TaskIcon from "@mui/icons-material/Task";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import "./sidebar.css";
-import useLogout from "../logoutfunction/useLogout";
+import useLogout from "./useLogout";
 
 const Sidebar = () => {
   const [menuData, setMenuData] = useState([]);

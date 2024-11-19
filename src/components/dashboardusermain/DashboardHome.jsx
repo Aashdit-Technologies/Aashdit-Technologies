@@ -7,12 +7,10 @@ const DashboardHome = () => {
   return (
     <>
       <div className="dashbdhome">
-        <div className="container-fluid">
           <div className="row">
             <EmploeeyBox />
             <RightSideBar />
           </div>
-        </div>
       </div>
     </>
   )

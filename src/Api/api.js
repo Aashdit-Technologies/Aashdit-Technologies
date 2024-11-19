@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuthStore from "../store/Store"; 
 
 const api = axios.create({
-  baseURL: "http://localhost:1111/hrms/api/",
+  baseURL: "http://192.168.3.124:1111/hrms/api/",
   headers: {
     "Content-Type": "application/json",
   },
